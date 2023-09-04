@@ -22,11 +22,14 @@ from warnings import filterwarnings
 from multiprocessing import cpu_count
 from joblib import Parallel
 from joblib import delayed
+
 def division_entreno_prueba(datos, n_prueba):
     return datos[:-n_prueba], datos[-n_prueba:]
+
 def medir_rmse(actual, predicho):
     return sqrt(mean_squared_error(actual, predicho))
 # validación "walk-forward" para datos univariados
+
 def validacion_al_frente(datos, n_prueba, metodo, cfg):
     predicciones = []
     # dividir el conjunto de datos
@@ -49,6 +52,7 @@ def validacion_al_frente(datos, n_prueba, metodo, cfg):
     # estimar el error de las predicciones
     error = medir_rmse(prueba, predicciones)
     return [error, predicciones]
+
 def busqueda_malla(datos, lista_cfg, n_prueba, metodo = "sarima", paralelo = True):
     resultados = None
     if paralelo:
@@ -64,6 +68,7 @@ def busqueda_malla(datos, lista_cfg, n_prueba, metodo = "sarima", paralelo = Tru
         resultados = [r for r in resultados if r[1] != None]
         print(len(resultados))
     return resultados
+
 def calificar_modelo(datos, n_prueba, metodo, cfg, debug = False):
     resultado = None
     predicciones = None
@@ -85,6 +90,7 @@ def calificar_modelo(datos, n_prueba, metodo, cfg, debug = False):
     if resultado is not None:
         print(f' > Modelo{llave} {resultado:.3f}')
     return (llave, resultado, predicciones)
+
 def encontrar_mejor_solucion(series, nombre, metodo = "sarima", muestra = False):
     datos = series.values
     resultados = []
@@ -162,6 +168,7 @@ def prediccion_sarima(historia, config):
     # hacer la predicción de un paso
     yhat = modelo_ajustado.predict(len(historia), len(historia))
     return yhat[0]
+
 def config_sarima(estacional = [0]):
     modelos = []
     # definir las listas de configuración
@@ -199,6 +206,7 @@ def prediccion_alisamiento_exp(historia, config):
     # predecir un paso
     yhat = modelo_ajustado.predict(len(historia), len(historia))
     return yhat[0]
+
 def config_alisamiento_exp(estacional = [None]):
     modelos = []
     # definir las listas de config
